@@ -877,7 +877,6 @@ body.show-remaining .gr-check-row.gr-checked { display: none; }
   }
   function panic(msg) {
     $content.innerHTML = `<div class="error-state">⚠️ Engine error: ${esc(msg)}</div>`;
-    $title.textContent = 'Error';
   }
 
   boot().catch(e => panic(e.message));
