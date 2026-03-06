@@ -1134,7 +1134,7 @@ function attachLinkListeners() {
 function scrollToPanel(index){
   const panels = Array.from(document.querySelectorAll('.gr-card'));
   if(index < 0 || index >= panels.length) {
-    consol.log("panel " + index + " not found");
+    console.log("panel " + index + " not found");
     return;
   }
   const panel = panels[index];
