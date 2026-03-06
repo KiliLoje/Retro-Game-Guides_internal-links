@@ -96,6 +96,8 @@
   padding: 1px 5px;
   color: var(--emphasis);
 }
+.gr-internal-link { color: var(--emphasis); text-decoration : underline; cursor : pointer; }
+
 .gr-link { color: var(--emphasis); }
 
 /* ── Shared Table Wrap ── */
@@ -225,12 +227,14 @@
     let h = esc(s);
     // Headers
     h = h.replace(/^### (.+)$/gm, '<h3 class="gr-h3">$1</h3>');
-    h = h.replace(/^## (.+)$/gm,  '<h3 class="gr-h3">$1</h3>');
+    h = h.replace(/^## (.+)$/gm, '<h3 class="gr-h3">$1</h3>');
     // Bold / italic
     h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    h = h.replace(/\*(.+?)\*/g,     '<em>$1</em>');
+    h = h.replace(/\*(.+?)\*/g, '<em>$1</em>');
     // Inline code
     h = h.replace(/`(.+?)`/g, '<code class="gr-code">$1</code>');
+    // Internal links
+    h = h.replace(/\[(.+?)\]\(\s*(\d+)\s*,\s*(\d+)\s*\)/g, '<span class="gr-internal-link" tab="$2" panel="$3">$1</span>')
     // Links
     h = h.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="gr-link" target="_blank" rel="noopener">$1</a>');
     // Unordered lists (collect consecutive li items)
@@ -256,7 +260,7 @@
   // ── PANEL ENTRY POINT ─────────────────────────────────────────────────
   function panel(def, ctx) {
     injectStyles();
-    ctx = Object.assign({ save: () => {}, load: () => false, preview: true }, ctx);
+    ctx = Object.assign({ save: () => { }, load: () => false, preview: true }, ctx);
 
     const wrap = document.createElement('div');
     wrap.className = 'gr-panel-wrap';
@@ -300,11 +304,11 @@
 
   function renderContent(def, ctx) {
     switch (def.panelType) {
-      case 'text':      return renderText(def);
-      case 'keyvalue':  return renderKeyValue(def);
+      case 'text': return renderText(def);
+      case 'keyvalue': return renderKeyValue(def);
       case 'checklist': return renderChecklist(def, ctx);
-      case 'table':     return renderTable(def);
-      case 'cards':     return renderCards(def);
+      case 'table': return renderTable(def);
+      case 'cards': return renderCards(def);
       default: {
         const d = document.createElement('div');
         d.style.cssText = 'padding:8px;font-size:12px;color:var(--textMuted)';
@@ -355,7 +359,7 @@
   // ── CHECKLIST ─────────────────────────────────────────────────────────
   function renderChecklist(def, ctx) {
     const entryKey = Object.keys(def).find(k => k.startsWith('entry_'));
-    const items   = (entryKey ? def[entryKey] : def.items) || [];
+    const items = (entryKey ? def[entryKey] : def.items) || [];
     const columns = def.columns || [];
     const wrap = document.createElement('div');
 
@@ -370,8 +374,8 @@
     let progressWrap = null;
     if (!ctx.preview && items.length) {
       const total = items.length;
-      const done  = items.filter(it => ctx.load(it.id)).length;
-      const pct   = Math.round(done / total * 100);
+      const done = items.filter(it => ctx.load(it.id)).length;
+      const pct = Math.round(done / total * 100);
       progressWrap = document.createElement('div');
       progressWrap.className = 'gr-progress-wrap';
       progressWrap.innerHTML = `
@@ -387,9 +391,9 @@
 
     // Header row
     const thead = document.createElement('thead');
-    const htr   = document.createElement('tr');
-    const cbTh  = document.createElement('th'); cbTh.style.width = '36px';
-    const nmTh  = document.createElement('th'); nmTh.textContent = def.nameLabel || 'Item';
+    const htr = document.createElement('tr');
+    const cbTh = document.createElement('th'); cbTh.style.width = '36px';
+    const nmTh = document.createElement('th'); nmTh.textContent = def.nameLabel || 'Item';
     htr.append(cbTh, nmTh);
     columns.forEach(col => {
       const th = document.createElement('th');
@@ -441,10 +445,10 @@
         ctx.save(item.id, now);
         if (progressWrap) {
           const total = items.length;
-          const done  = items.filter(it => ctx.load(it.id)).length;
-          const fill  = progressWrap.querySelector('.gr-progress-fill');
+          const done = items.filter(it => ctx.load(it.id)).length;
+          const fill = progressWrap.querySelector('.gr-progress-fill');
           const count = progressWrap.querySelector('.gr-progress-count');
-          if (fill)  fill.style.width = Math.round(done / total * 100) + '%';
+          if (fill) fill.style.width = Math.round(done / total * 100) + '%';
           if (count) count.textContent = done;
         }
       });
@@ -460,14 +464,14 @@
   // ── TABLE ─────────────────────────────────────────────────────────────
   function renderTable(def) {
     const columns = def.columns || [];
-    const rows    = def.rows    || [];
+    const rows = def.rows || [];
     const tw = document.createElement('div');
     tw.className = 'gr-table-wrap';
     const table = document.createElement('table');
 
     if (columns.length) {
       const thead = document.createElement('thead');
-      const htr   = document.createElement('tr');
+      const htr = document.createElement('tr');
       columns.forEach(col => {
         const th = document.createElement('th');
         th.textContent = typeof col === 'string' ? col : (col.label || col.key || '');
@@ -479,7 +483,7 @@
 
     const tbody = document.createElement('tbody');
     rows.forEach(row => {
-      const tr    = document.createElement('tr');
+      const tr = document.createElement('tr');
       const cells = Array.isArray(row)
         ? row
         : columns.map(c => row[typeof c === 'string' ? c : (c.key || c.label || '')] ?? '');
@@ -498,7 +502,7 @@
   // ── CARDS ─────────────────────────────────────────────────────────────
   function renderCards(def) {
     const cardFields = def.cardFields || [];
-    const cards      = def.cards      || [];
+    const cards = def.cards || [];
     const wrap = document.createElement('div');
     wrap.className = 'gr-cards';
 
