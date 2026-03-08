@@ -1,7 +1,7 @@
 # BDR Game Guides
 
 
-### !!! THE PROJECT GOT ENTIERLY REMADE. I'M KEEPING THIS FOR ARCHIVING PURPOSES !!!
+### !!! THE PROJECT GOT ENTIERLY REMADE. I'M KEEPING THIS FOR ARCHIVING PURPOSES. THE NEW REPO CAN BE FOUND [HERE](https://github.com/BigDonRob/Retro-Game-Guides) !!!
 
 A collection of comprehensive game guides for retro achievement hunting.
 
