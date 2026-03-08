@@ -1,5 +1,8 @@
 # BDR Game Guides
 
+
+### !!! THE PROJECT GOT ENTIERLY REMADE. I'M KEEPING THIS FOR ARCHIVING PURPOSES !!!
+
 A collection of comprehensive game guides for retro achievement hunting.
 
 ## Features
